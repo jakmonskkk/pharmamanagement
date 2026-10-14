@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PharmaManagement — Intelligent Pharmacy Control</title>
+  
+  <!-- Modern Geometric Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-viewport">
+
+    <!-- Dedicated Login Screen / Authentication Portal -->
+    <!-- Dedicated Login Screen / Authentication Portal (Modern Split UI) -->
+    <section class="auth-screen" id="authScreen">
+      <div class="modern-split-card">
+        
+        <!-- Left Pane: Modern Clean Login Form (Matching Requested UI) -->
+        <div class="auth-form-pane">
+          
+          <div class="modern-login-header">
+            <div class="orb-3d auth-orb-accent"></div>
+            <h1 class="modern-login-title">Login</h1>
+            <p class="modern-login-subtitle">Welcome to <span class="brand-pink-text">PharmaManagement</span></p>
+          </div>
+
+          <!-- Role Portal Switcher Tabs -->
+          <div class="auth-portal-tabs auth-portal-tabs-three" role="tablist" aria-label="Access Portals">
+            <button type="button" class="auth-tab active" id="tabAdminPortal" onclick="switchAuthPortal('admin')" role="tab" aria-selected="true">
+              <span class="auth-tab-icon">👑</span>
+              <span class="auth-tab-label">Admin</span>
+            </button>
+            <button type="button" class="auth-tab" id="tabSalesPortal" onclick="switchAuthPortal('salesperson')" role="tab" aria-selected="false">
+              <span class="auth-tab-icon">🛒</span>
+              <span class="auth-tab-label">Sales Counter</span>
+            </button>
+            <button type="button" class="auth-tab" id="tabCustomerPortal" onclick="switchAuthPortal('customer')" role="tab" aria-selected="false">
+              <span class="auth-tab-icon">🛍️</span>
+              <span class="auth-tab-label">Customer</span>
+            </button>
+          </div>
+
+          <!-- Login Form -->
+          <form class="auth-form" id="loginForm" onsubmit="handleLoginSubmit(event)">
+            <div class="auth-field-group">
+              <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <input type="text" id="loginUsername" class="auth-input rounded-input" placeholder="Username or email" required autocomplete="username">
+              </div>
+            </div>
+
+            <div class="auth-field-group">
+              <div class="auth-input-wrapper">
+                <svg class="auth-input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input type="password" id="loginPassword" class="auth-input rounded-input" placeholder="password" required autocomplete="current-password">
+                <button type="button" class="auth-password-toggle" onclick="togglePasswordVisibility()" title="Toggle password visibility" aria-label="Toggle password visibility">
+                  <svg id="eyeIconOpen" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                  <svg id="eyeIconClosed" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Forgot Password Link Row -->
+            <div class="auth-forgot-row">
+              <a href="javascript:void(0)" class="auth-forgot-link" onclick="handleForgotPassword()">Forgot?</a>
+            </div>
+
+            <!-- Alert / Error Banner -->
+            <div class="auth-error-banner" id="authErrorBanner" style="display: none;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span id="authErrorMessage">Invalid username or password.</span>
+            </div>
+
+            <!-- Primary Login Button -->
+            <button type="submit" class="auth-submit-btn modern-blue-btn" id="loginSubmitBtn">
+              <span id="loginBtnText">Login</span>
+            </button>
+
+            <!-- Quick Demo Access Chips -->
+            <div class="auth-quick-fill">
+              <span class="quick-fill-label">Quick Demo Access:</span>
+              <div class="quick-fill-buttons quick-fill-three">
+                <button type="button" class="quick-fill-btn" onclick="quickFillCredentials('admin')">
+                  <span>👑 Admin</span>
+                  <span class="cred-hint">admin / admin123</span>
+                </button>
+                <button type="button" class="quick-fill-btn" onclick="quickFillCredentials('salesperson')">
+                  <span>🛒 Sales</span>
+                  <span class="cred-hint">sales / sales123</span>
+                </button>
+                <button type="button" class="quick-fill-btn" onclick="quickFillCredentials('customer')">
+                  <span>🛍️ Customer</span>
+                  <span class="cred-hint">customer / customer123</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Toggle between login and registration for customers -->
+            <div class="customer-auth-switch" id="custAuthSwitchLink" style="display:none; text-align:center; margin-top:0.85rem; font-size:0.82rem;">
+              <span id="custSwitchText">New Patient?</span> 
+              <a href="javascript:void(0)" id="custSwitchAction" onclick="toggleCustomerRegForm()" style="color:#ff6b7e; font-weight:700; text-decoration:none;">Create Patient Profile & Register</a>
+            </div>
+          </form>
+
+          <!-- Customer Registration Form (Toggled when customer wants to register) -->
+          <form class="auth-form" id="customerRegisterForm" onsubmit="handleCustomerRegisterSubmit(event)" style="display:none;">
+            <div class="reg-form-scrollable">
+              <div class="auth-field-row">
+                <div class="auth-field-group">
+                  <label class="auth-label">Full Name *</label>
+                  <input type="text" id="regFullName" class="auth-input rounded-input" placeholder="e.g. Rahul Sharma" required>
+                </div>
+                <div class="auth-field-group">
+                  <label class="auth-label">Mobile Phone *</label>
+                  <input type="tel" id="regPhone" class="auth-input rounded-input" placeholder="e.g. +91 9811223344" required>
+                </div>
+              </div>
+
+              <div class="auth-field-row">
+                <div class="auth-field-group">
+                  <label class="auth-label">Email Address *</label>
+                  <input type="email" id="regEmail" class="auth-input rounded-input" placeholder="e.g. rahul@example.com" required>
+                </div>
+                <div class="auth-field-group">
+                  <label class="auth-label">Age *</label>
+                  <input type="number" id="regAge" class="auth-input rounded-input" placeholder="e.g. 32" min="1" max="120" required>
+                </div>
+              </div>
+
+              <div class="auth-field-row">
+                <div class="auth-field-group">
+                  <label class="auth-label">Gender</label>
+                  <select id="regGender" class="auth-input rounded-input">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div class="auth-field-group">
+                  <label class="auth-label">Blood Group</label>
+                  <select id="regBloodGroup" class="auth-input rounded-input">
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="auth-field-group">
+                <label class="auth-label">Delivery Street Address *</label>
+                <input type="text" id="regAddress" class="auth-input rounded-input" placeholder="Flat No, Building, Area, Landmark" required>
+              </div>
+
+              <div class="auth-field-row">
+                <div class="auth-field-group">
+                  <label class="auth-label">City *</label>
+                  <input type="text" id="regCity" class="auth-input rounded-input" placeholder="e.g. Pune" required>
+                </div>
+                <div class="auth-field-group">
+                  <label class="auth-label">Pincode *</label>
+                  <input type="text" id="regPincode" class="auth-input rounded-input" placeholder="e.g. 411014" required>
+                </div>
+              </div>
+
+              <div class="auth-field-group">
+                <label class="auth-label">Known Drug Allergies / Medical Notes</label>
+                <input type="text" id="regAllergies" class="auth-input rounded-input" placeholder="e.g. None, Penicillin, Aspirin, Diabetic">
+              </div>
+
+              <div class="auth-field-row">
+                <div class="auth-field-group">
+                  <label class="auth-label">Portal Username *</label>
+                  <input type="text" id="regUsername" class="auth-input rounded-input" placeholder="Choose username" required autocomplete="username">
+                </div>
+                <div class="auth-field-group">
+                  <label class="auth-label">Password *</label>
+                  <input type="password" id="regPassword" class="auth-input rounded-input" placeholder="Choose password" required autocomplete="new-password">
+                </div>
+              </div>
+            </div>
+
+            <div class="auth-error-banner" id="regErrorBanner" style="display:none;">
+              <span id="regErrorMessage">Please complete all required fields.</span>
+            </div>
+
+            <button type="submit" class="auth-submit-btn modern-blue-btn" id="regSubmitBtn" style="margin-top:0.5rem;">
+              <span>Create Patient Profile & Enter Storefront →</span>
+            </button>
+
+            <div style="text-align:center; margin-top:0.6rem; font-size:0.82rem;">
+              <span>Already have an account?</span> 
+              <a href="javascript:void(0)" onclick="toggleCustomerRegForm(false)" style="color:#4361ee; font-weight:700; text-decoration:none;">Sign In instead</a>
+            </div>
+          </form>
+
+        </div>
+
+        <!-- Right Pane: Pharmacy Platform Illustration with Curved Wave (Matching Image 1) -->
+        <div class="auth-illustration-pane">
+          <img src="pharmacy-illustration.svg" alt="Pharmacy Platform Illustration" class="auth-art-image">
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Main Application Views (Authenticated Container) -->
+    <div class="main-app-container" id="mainAppContainer" style="display: none;">
+
+      <!-- Global Top Bar: Pill Filter Tabs + Search & Controls -->
+      <header class="top-nav-bar">
+      <!-- Centered Pill Filter Tabs -->
+      <nav class="pill-segmented-tabs" aria-label="System Views">
+        <button class="pill-tab active" data-target="overview">Overview</button>
+        <button class="pill-tab sales-only-tab" data-target="pos" onclick="openBillingScreen()">⚡ POS Billing</button>
+        <button class="pill-tab" data-target="near-expiry">Near Expiry</button>
+        <button class="pill-tab" data-target="expired">Expired Stock</button>
+        <button class="pill-tab admin-tab" data-target="recall">Recall Audit</button>
+        <button class="pill-tab admin-tab" data-target="valuation">Valuation</button>
+        <button class="pill-tab admin-tab" data-target="analytics" onclick="openAnalyticsScreen()">📊 Risk Heatmap</button>
+
+        <!-- Customer-Only Navigation Tabs -->
+        <button class="pill-tab customer-only-tab" data-target="store" onclick="switchCustomerSubView('store')" style="display:none;">🛍️ Medicine Store</button>
+        <button class="pill-tab customer-only-tab" data-target="cart" onclick="switchCustomerSubView('cart')" style="display:none;">🛒 My Rx Bag (<span id="cartCountBadgeTop">0</span>)</button>
+        <button class="pill-tab customer-only-tab" data-target="orders" onclick="switchCustomerSubView('orders')" style="display:none;">📋 Orders & Receipts</button>
+        <button class="pill-tab customer-only-tab" data-target="profile" onclick="switchCustomerSubView('profile')" style="display:none;">👤 Health Profile</button>
+      </nav>
+
+      <!-- Right Controls: Role Switcher + Search Pill + Notification Pills -->
+      <div class="top-controls">
+        <!-- Authenticated User Profile Badge + Logout Button -->
+        <div class="user-session-pill" id="userSessionPill">
+          <div class="user-avatar-badge" id="sessionUserAvatar">👑</div>
+          <div class="user-meta">
+            <span class="user-name" id="sessionUserName">Dr. Sarah Jenkins</span>
+            <span class="user-role-tag" id="sessionUserRole">Administrator</span>
+          </div>
+          <button class="logout-btn" id="btnLogout" onclick="logoutUser()" title="Logout & Lock Terminal" aria-label="Logout user">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+              <polyline points="16 17 21 12 16 7"></polyline>
+              <line x1="21" y1="12" x2="9" y2="12"></line>
+            </svg>
+            <span>Exit</span>
+          </button>
+        </div>
+
+        <div class="search-pill-container">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="globalSearchInput" placeholder="Search..." autocomplete="off">
+        </div>
+
+        <button class="icon-pill-btn" onclick="openNearExpiryModal()" title="Notifications & Expiry Alerts">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="badge-dot" id="notifBadgeDot" style="display:none;"></span>
+        </button>
+
+        <button class="icon-pill-btn admin-card" title="Stock Valuation & Financial Reports" onclick="openValuationModal()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </button>
+
+        <button class="icon-pill-btn sales-only-pill" title="⚡ Launch POS Dispensing Terminal" onclick="openBillingScreen()" style="display:none;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="9" cy="21" r="1"></circle>
+            <circle cx="20" cy="21" r="1"></circle>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ========================================================
+         CUSTOMER / PATIENT PORTAL DISPENSARY SCREEN
+         ======================================================== -->
+    <section class="customer-portal-screen" id="customerPortalScreen" style="display: none;">
+      
+      <!-- Customer Welcome Hero & Stats -->
+      <div class="cust-hero-banner glass-panel">
+        <div class="cust-hero-content">
+          <div class="portal-badge" style="background: rgba(14, 165, 233, 0.15); color: var(--sky-accent);">🛍️ Certified Patient Dispensary</div>
+          <h2 class="cust-hero-title">Welcome, <span id="custWelcomeName">Rahul Sharma</span></h2>
+          <p class="cust-hero-sub">Order genuine medicines direct from warehouse batches with real-time expiry guarantees.</p>
+          <div class="cust-profile-chips" id="custProfileChips">
+            <span class="cust-chip">📞 <span id="chipPhone">+91 9811223344</span></span>
+            <span class="cust-chip">📍 <span id="chipCity">Pune</span></span>
+            <span class="cust-chip">🩸 Blood Group: <strong id="chipBlood">O+</strong></span>
+            <span class="cust-chip" id="chipAllergyWrap">⚠️ Allergies: <strong id="chipAllergies">None</strong></span>
+          </div>
+        </div>
+        <div class="cust-hero-actions">
+          <button class="cust-pill-btn active" id="btnTabStore" onclick="switchCustomerSubView('store')">
+            <span>🛍️ Medicine Catalog</span>
+          </button>
+          <button class="cust-pill-btn" id="btnTabCart" onclick="switchCustomerSubView('cart')">
+            <span>🛒 My Rx Bag (<span id="cartCountBadge">0</span>)</span>
+          </button>
+          <button class="cust-pill-btn" id="btnTabOrders" onclick="switchCustomerSubView('orders')">
+            <span>📋 Orders & Invoices</span>
+          </button>
+          <button class="cust-pill-btn" id="btnTabProfile" onclick="switchCustomerSubView('profile')">
+            <span>👤 Health Profile</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 1: MEDICINE STORE CATALOG -->
+      <div class="cust-view-pane" id="custStorePane">
+        
+        <!-- Search & Filter Controls -->
+        <div class="glass-panel cust-filter-bar">
+          <div class="cust-search-wrapper">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--text-muted)">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="custSearchInput" placeholder="Search medicines by name, category, or symptoms..." oninput="filterCustomerMedicines()">
+          </div>
+          <div class="cust-category-pills" id="custCategoryPills">
+            <button class="cat-pill active" onclick="filterCustomerCategory('all')">All Formulations</button>
+            <button class="cat-pill" onclick="filterCustomerCategory('Antipyretic / Analgesic')">Pain & Fever</button>
+            <button class="cat-pill" onclick="filterCustomerCategory('Antibiotic')">Antibiotics</button>
+            <button class="cat-pill" onclick="filterCustomerCategory('Cardiovascular')">Cardiovascular</button>
+            <button class="cat-pill" onclick="filterCustomerCategory('Antidiabetic')">Diabetes</button>
+            <button class="cat-pill" onclick="filterCustomerCategory('Nutritional Supplement')">Nutritional</button>
+            <button class="cat-pill" onclick="filterCustomerCategory('Respiratory')">Respiratory</button>
+            <button class="cat-pill" onclick="filterCustomerCategory('Gastrointestinal')">Gastrointestinal</button>
+          </div>
+        </div>
+
+        <!-- Medicine Cards Grid -->
+        <div class="cust-medicine-grid" id="custMedicineGrid">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+
+      </div>
+
+      <!-- SUB-VIEW 2: MY RX BAG & CHECKOUT -->
+      <div class="cust-view-pane" id="custCartPane" style="display: none;">
+        <div class="cart-checkout-layout">
+          
+          <!-- Left: Cart Items -->
+          <div class="glass-panel cart-items-card">
+            <div class="cart-card-header">
+              <h3>🛒 Items in Your Rx Bag</h3>
+              <button class="text-btn" onclick="clearCustomerCart()" style="color:var(--coral-accent); font-size:0.8rem; font-weight:700; background:none; border:none; cursor:pointer;">Clear Bag</button>
+            </div>
+            
+            <div id="cartItemsList" style="margin-top:1rem;">
+              <!-- Rendered dynamically by app.js -->
+            </div>
+          </div>
+
+          <!-- Right: Delivery Details & Safety Verification -->
+          <div class="glass-panel cart-summary-card">
+            <h3 class="summary-card-title">Order & Delivery Checkout</h3>
+
+            <!-- Patient Safety & Allergy Guard Banner -->
+            <div class="patient-allergy-guard" id="patientAllergyGuard">
+              <div class="guard-icon">🛡️</div>
+              <div>
+                <strong>Patient Safety Verification:</strong>
+                <p id="patientAllergyNotice" style="margin:0.2rem 0 0 0; font-size:0.8rem; line-height:1.3;">Verified against registered medical allergies.</p>
+              </div>
+            </div>
+
+            <!-- Delivery Address Confirmation -->
+            <div class="checkout-form-grid" style="margin-top:1rem;">
+              <div class="checkout-field">
+                <label class="auth-label">Recipient Name</label>
+                <input type="text" id="orderRecipientName" class="auth-input">
+              </div>
+              <div class="checkout-field">
+                <label class="auth-label">Contact Phone</label>
+                <input type="text" id="orderRecipientPhone" class="auth-input">
+              </div>
+              <div class="checkout-field full-width">
+                <label class="auth-label">Delivery Street Address</label>
+                <input type="text" id="orderDeliveryAddress" class="auth-input">
+              </div>
+              <div class="checkout-field">
+                <label class="auth-label">City</label>
+                <input type="text" id="orderDeliveryCity" class="auth-input">
+              </div>
+              <div class="checkout-field">
+                <label class="auth-label">Pincode</label>
+                <input type="text" id="orderDeliveryPincode" class="auth-input">
+              </div>
+              <div class="checkout-field full-width">
+                <label class="auth-label">Doctor Prescription / Order Note (Optional)</label>
+                <input type="text" id="orderDoctorNotes" class="auth-input" placeholder="e.g. Dr. A. Sharma Rx #9921">
+              </div>
+            </div>
+
+            <!-- Price Breakdown -->
+            <div class="price-breakdown-box" style="margin-top:1.2rem;">
+              <div class="price-row">
+                <span>Medicines Subtotal</span>
+                <span id="cartSubtotalText">₹0.00</span>
+              </div>
+              <div class="price-row">
+                <span>Direct Warehouse Discount (5%)</span>
+                <span style="color:var(--emerald-accent);" id="cartDiscountText">-₹0.00</span>
+              </div>
+              <div class="price-row">
+                <span>Verified Express Delivery</span>
+                <span style="color:var(--emerald-accent); font-weight:700;">FREE</span>
+              </div>
+              <div class="price-row total-row">
+                <strong>Payable Total</strong>
+                <strong id="cartGrandTotalText" style="color:var(--lavender-accent); font-size:1.25rem;">₹0.00</strong>
+              </div>
+            </div>
+
+            <button type="button" class="auth-submit-btn" id="btnPlaceCustomerOrder" onclick="submitCustomerOrder()" style="width:100%; margin-top:1rem;">
+              <span>⚡ Place Order & Verify Batch Delivery</span>
+            </button>
+            <p style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin-top:0.6rem;">
+              ✓ Instant MySQL ACID Transaction • Real-time warehouse batch deduction
+            </p>
+          </div>
+
+        </div>
+
+        <!-- Post-Order Confirmation Receipt Modal Container -->
+        <div id="custOrderConfirmationContainer" style="display:none; margin-top: 1.5rem;">
+          <!-- Dynamically filled on successful order -->
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 3: MY ORDERS & INVOICES -->
+      <div class="cust-view-pane" id="custOrdersPane" style="display: none;">
+        <div class="glass-panel" style="padding:2rem;">
+          <div class="orders-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem;">
+            <div>
+              <h3>📋 Your Medication Order History</h3>
+              <p style="color:var(--text-secondary); font-size:0.85rem;">Official tax invoices and delivery batch records</p>
+            </div>
+            <button class="cust-pill-btn" onclick="loadCustomerOrdersList()">🔄 Refresh Orders</button>
+          </div>
+          <div id="custOrdersContainer" style="margin-top:1.5rem;">
+            <!-- Loaded dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-VIEW 4: PATIENT HEALTH PROFILE -->
+      <div class="cust-view-pane" id="custProfilePane" style="display: none;">
+        <div class="glass-panel profile-container-card" style="padding:2.2rem;">
+          <div class="profile-header" style="display:flex; align-items:center; gap:1rem; margin-bottom:1.5rem;">
+            <div class="user-avatar-badge" style="width:48px; height:48px; font-size:1.5rem;">🛍️</div>
+            <div>
+              <h3>Patient Health Profile & Delivery Details</h3>
+              <p style="color:var(--text-muted); font-size:0.85rem;">Managed medical details for automated dosage verification and contraindication checks</p>
+            </div>
+          </div>
+
+          <form id="profileUpdateForm" onsubmit="handleCustomerProfileUpdate(event)">
+            <div class="profile-form-grid">
+              <div class="form-group">
+                <label class="auth-label">Full Name</label>
+                <input type="text" id="profFullName" class="auth-input" required>
+              </div>
+              <div class="form-group">
+                <label class="auth-label">Mobile Phone</label>
+                <input type="text" id="profPhone" class="auth-input" required>
+              </div>
+              <div class="form-group">
+                <label class="auth-label">Email Address</label>
+                <input type="email" id="profEmail" class="auth-input">
+              </div>
+              <div class="form-group">
+                <label class="auth-label">Age</label>
+                <input type="number" id="profAge" class="auth-input" min="1" max="120">
+              </div>
+              <div class="form-group">
+                <label class="auth-label">Gender</label>
+                <select id="profGender" class="auth-input">
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="auth-label">Blood Group</label>
+                <select id="profBloodGroup" class="auth-input">
+                  <option value="O+">O+</option>
+                  <option value="O-">O-</option>
+                  <option value="A+">A+</option>
+                  <option value="A-">A-</option>
+                  <option value="B+">B+</option>
+                  <option value="B-">B-</option>
+                  <option value="AB+">AB+</option>
+                  <option value="AB-">AB-</option>
+                </select>
+              </div>
+              <div class="form-group full-width">
+                <label class="auth-label">Delivery Street Address</label>
+                <input type="text" id="profAddress" class="auth-input" required>
+              </div>
+              <div class="form-group">
+                <label class="auth-label">City</label>
+                <input type="text" id="profCity" class="auth-input">
+              </div>
+              <div class="form-group">
+                <label class="auth-label">Pincode</label>
+                <input type="text" id="profPincode" class="auth-input">
+              </div>
+              <div class="form-group full-width">
+                <label class="auth-label">Known Drug Allergies / Medical Conditions</label>
+                <input type="text" id="profAllergies" class="auth-input" placeholder="e.g. None, Penicillin, Aspirin, Sulfa drugs, Diabetic">
+                <small style="color:var(--text-muted); font-size:0.75rem; margin-top:0.25rem; display:block;">Used to alert dispensing pharmacists and block dangerous contraindications.</small>
+              </div>
+            </div>
+
+            <div style="margin-top:1.5rem; display:flex; justify-content:flex-end;">
+              <button type="submit" class="auth-submit-btn" id="btnSaveProfile" style="margin-top:0; min-width:200px;">
+                <span>💾 Save Profile Details</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Main Bento Grid Layout (Dashboard Screen) -->
+    <main class="bento-grid" id="dashboardScreen">
+
+      <!-- ========================================================
+           COLUMN 1: NAVIGATION & BRANDING
+           ======================================================== -->
+      <aside>
+        <!-- Primary Menu Card -->
+        <div class="glass-panel nav-panel">
+          <!-- Brand with 3D Iridescent Orb -->
+          <div class="nav-brand">
+            <div class="orb-3d"></div>
+            <h1 class="brand-text">PharmaManagement</h1>
+          </div>
+
+          <!-- General Navigation Section -->
+          <div>
+            <div class="nav-section-title">General</div>
+            <ul class="nav-menu">
+              <li class="nav-item active" data-action="dashboard">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                  <rect x="3" y="3" width="7" height="7" rx="2"></rect>
+                  <rect x="14" y="3" width="7" height="7" rx="2"></rect>
+                  <rect x="14" y="14" width="7" height="7" rx="2"></rect>
+                  <rect x="3" y="14" width="7" height="7" rx="2"></rect>
+                </svg>
+                <span>Dashboard</span>
+              </li>
+
+              <li class="nav-item sales-only-item" data-action="pos" onclick="openBillingScreen()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span>POS Billing</span>
+              </li>
+
+              <li class="nav-item" data-action="inventory">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                  <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                  <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                <span>Inventory Catalog</span>
+              </li>
+
+              <li class="nav-item" data-action="expiry">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span>Expiry Radar</span>
+              </li>
+
+              <li class="nav-item admin-item" data-action="recall">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                  <line x1="12" y1="9" x2="12" y2="13"></line>
+                  <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+                <span>Recall Trace</span>
+              </li>
+
+              <li class="nav-item admin-item" data-action="valuation">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <line x1="12" y1="1" x2="12" y2="23"></line>
+                  <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                <span>Stock Valuation</span>
+              </li>
+
+              <li class="nav-item admin-item" data-action="analytics" onclick="openAnalyticsScreen()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                <span>Risk Heatmap</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Operations / Secondary Card -->
+        <div class="glass-panel others-panel">
+          <div class="nav-section-title">Operations</div>
+          <ul class="nav-menu">
+            <li class="nav-item admin-item" onclick="openValuationModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+              </svg>
+              <span>Category Reports</span>
+            </li>
+            <li class="nav-item admin-item" onclick="openRecallModal('BATCH-PAR-26A')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+              <span>Batch Audit Log</span>
+            </li>
+            <li class="nav-item" onclick="openExpiredModal()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+              <span>Quarantine Store</span>
+            </li>
+          </ul>
+        </div>
+      </aside>
+
+      <!-- ========================================================
+           COLUMN 2: CENTER STATUS & ARTISTIC FLUID CARDS
+           ======================================================== -->
+      <section class="col-center">
+
+        <!-- Fluid Hero Art Card: Expiry Radar (Theme of 'Meditate' in screenshot) -->
+        <div class="hero-fluid-card" onclick="openNearExpiryModal()">
+          <div>
+            <h2 class="hero-card-title">Expiry Radar</h2>
+            <p class="hero-card-meta" id="heroExpiryMeta">Scanning real-time batches...</p>
+          </div>
+          <div class="floating-action-circle" title="View Near-Expiry Batches">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Central Status Card (Theme of 'Good Morning...' in screenshot) -->
+        <div class="glass-panel greeting-card">
+          <!-- Central Large 3D Iridescent Orb -->
+          <div class="orb-3d orb-3d-lg"></div>
+
+          <h3 class="greeting-heading">
+            Real-Time <strong>PharmaManagement</strong>,<br>What's on your radar?
+          </h3>
+
+          <!-- Live KPI Badges -->
+          <div class="live-kpi-pill-row">
+            <div class="stat-pill" onclick="openInventoryModal()">
+              <span class="stat-dot green"></span>
+              <span id="statBatchCount">Loading...</span>
+            </div>
+            <div class="stat-pill" onclick="openNearExpiryModal()">
+              <span class="stat-dot amber"></span>
+              <span id="statNearExpiry">-- Near Expiry</span>
+            </div>
+            <div class="stat-pill" onclick="openExpiredModal()">
+              <span class="stat-dot rose"></span>
+              <span id="statExpired">-- Expired</span>
+            </div>
+            <div class="stat-pill admin-card" onclick="openValuationModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--emerald-accent)">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"></path>
+                <path d="M12 18V6"></path>
+              </svg>
+              <span id="statValuation">₹--</span>
+            </div>
+            <div class="stat-pill sales-only-pill" onclick="openBillingScreen()" style="display:none;">
+              <span class="stat-dot green"></span>
+              <span>Terminal Online • Ready to Bill</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Supplier Box: Suppliers & Sourced Batches (Admin Only) -->
+        <div class="glass-panel supplier-box-card admin-card" onclick="openSupplierModal()">
+          <div class="supplier-box-header">
+            <div>
+              <div class="nav-section-title" style="padding:0; margin-bottom:0.2rem; color:var(--lavender-accent);">Distributor Network</div>
+              <h4 class="supplier-box-title">Suppliers & Sourced Batches</h4>
+              <p class="supplier-box-sub" id="supplierSummaryText">10 verified suppliers supplying 50 active batches</p>
+            </div>
+            <div class="floating-action-circle" title="View All Suppliers & Batches">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </div>
+          </div>
+          <div class="supplier-chips-list" id="supplierChipsContainer">
+            <span class="supplier-mini-pill">Sun Pharma Distributors</span>
+            <span class="supplier-mini-pill">Cipla Logistics Hub</span>
+            <span class="supplier-mini-pill">Dr. Reddy's MedSupply</span>
+            <span class="supplier-mini-pill">+7 more distributors</span>
+          </div>
+        </div>
+
+        <!-- Salesperson Quick POS Card (Salesperson Only) -->
+        <div class="glass-panel supplier-box-card sales-pos-banner sales-only-card" style="display:none;" onclick="openBillingScreen()">
+          <div class="supplier-box-header">
+            <div>
+              <div class="nav-section-title" style="padding:0; margin-bottom:0.2rem; color:var(--emerald-accent);">Billing Counter</div>
+              <h4 class="supplier-box-title">⚡ Smart POS Dispensing Terminal</h4>
+              <p class="supplier-box-sub">Click to initiate sales, scan batches & generate patient invoices</p>
+            </div>
+            <div class="floating-action-circle" title="Launch POS Billing">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </div>
+          </div>
+          <div class="supplier-chips-list">
+            <span class="pos-mini-pill">✓ Real-time MySQL ACID Stock Deduction</span>
+            <span class="pos-mini-pill">🛡️ Trigger Defense (Blocks Expired Stock)</span>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================
+           COLUMN 3: PILL WIDGETS, TWIN CARDS & INTELLIGENCE CHAT
+           ======================================================== -->
+      <section class="col-third">
+
+        <!-- Quick Dispense Pill (Theme of 'Ease into Sleep' in screenshot) -->
+        <div class="quick-pill-card" onclick="openNearExpiryModal()">
+          <div class="quick-pill-left">
+            <div class="mini-thumb">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+            </div>
+            <div class="quick-pill-meta">
+              <h4>Expiry Radar Scan</h4>
+              <p>Critical 30-Day Window</p>
+            </div>
+          </div>
+          <div class="play-action-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Twin Fluid Square Cards (Theme of 'Music' & 'Move' in screenshot) -->
+        <div class="twin-cards-row">
+          <div class="square-art-card card-inventory-theme" onclick="openInventoryModal()">
+            <h4 class="square-card-title">Inventory</h4>
+            <p class="square-card-sub">Stock Catalog</p>
+          </div>
+
+          <div class="square-art-card card-trace-theme admin-card" onclick="openRecallModal('BATCH-PAR-26A')">
+            <h4 class="square-card-title">Trace</h4>
+            <p class="square-card-sub">Batch Recall</p>
+          </div>
+
+          <div class="square-art-card card-pos-theme sales-only-card" onclick="openBillingScreen()" style="display:none;">
+            <h4 class="square-card-title">⚡ POS Billing</h4>
+            <p class="square-card-sub">Dispense Rx & Bill</p>
+          </div>
+        </div>
+
+        <!-- Interactive Intelligence Chat Card (Role-Partitioned: Admin vs Salesperson) -->
+        <div class="glass-panel assistant-chat-panel">
+          <!-- Role-Aware Chat Persona Header -->
+          <div class="chat-header-bar" id="chatHeaderBar">
+            <div class="chat-header-left">
+              <div class="chat-persona-badge" id="chatPersonaBadge">
+                <span class="chat-role-icon" id="chatRoleIcon">👑</span>
+                <span id="chatRoleBadgeText">Executive AI Copilot</span>
+              </div>
+              <div class="chat-persona-sub" id="chatPersonaSub">Warehouse inventory, valuations & recall audit</div>
+            </div>
+            <button type="button" class="chat-clear-btn" onclick="clearRoleChatHistory()" title="Clear chat history for current role">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+              <span>Reset</span>
+            </button>
+          </div>
+
+          <!-- Dynamic Chat Bubbles Container (Populated strictly by active role) -->
+          <div class="chat-bubble-container" id="chatBubbleContainer">
+            <!-- Rendered dynamically by switchChatbotRole() -->
+          </div>
+
+          <!-- Role-Tailored Quick Suggestion Chips -->
+          <div class="chat-suggestions-row" id="chatSuggestionsRow">
+            <!-- Injected dynamically per role -->
+          </div>
+
+          <!-- Bottom Pill Input Bar -->
+          <div class="chat-input-pill">
+            <input type="text" id="chatInput" placeholder="Ask PharmaManagement..." autocomplete="off">
+            <button type="button" class="chat-mic-btn" onclick="triggerMicSuggestion()" title="Voice assistance">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="8" y1="23" x2="16" y2="23"></line>
+              </svg>
+            </button>
+            <button type="button" class="chat-send-btn" id="chatSendBtn" title="Send query">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Dedicated Full Screen View (Replaces Popups) -->
+    <section class="dedicated-screen" id="dedicatedScreen" style="display: none;">
+      <div class="glass-panel screen-panel">
+        <div class="screen-header">
+          <div class="screen-header-left">
+            <button class="back-pill-btn" onclick="showDashboard()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              <span>Back to Dashboard</span>
+            </button>
+            <div class="screen-title-group">
+              <div class="orb-3d" style="width:34px; height:34px;"></div>
+              <div>
+                <h2 class="screen-title" id="screenTitle">Screen View</h2>
+                <p class="screen-sub" id="screenSub">Live database verification & records</p>
+              </div>
+            </div>
+          </div>
+          <div class="screen-header-right">
+            <span class="modal-badge" id="screenBadge">Live Data</span>
+          </div>
+        </div>
+
+        <div class="screen-body" id="screenBody">
+          <!-- Injected dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+    </div> <!-- /#mainAppContainer -->
+
+  </div> <!-- /.app-viewport -->
+
+  <!-- ========================================================
+       OFFICIAL PHARMACY TAX INVOICE & DISPENSING RECEIPT MODAL
+       ======================================================== -->
+  <div class="receipt-modal-backdrop" id="receiptModal" style="display: none;" onclick="handleReceiptBackdropClick(event)">
+    <div class="receipt-modal-dialog">
+      <!-- Modal Top Controls Bar -->
+      <div class="receipt-modal-actions no-print">
+        <div class="receipt-modal-badge">
+          <span class="live-dot" style="display:inline-block; width:8px; height:8px; background:var(--emerald-accent); border-radius:50%; margin-right:6px; box-shadow:0 0 8px var(--emerald-accent);"></span>
+          <span>Official Tax Invoice Preview</span>
+        </div>
+        <div class="receipt-modal-btn-group">
+          <button type="button" class="btn-print-receipt" onclick="printReceiptFromModal()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            <span>Print Official Receipt</span>
+          </button>
+          <button type="button" class="btn-close-receipt" onclick="closeReceiptModal()" title="Close Receipt (Esc)">
+            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Printable Official Pharmacy Receipt Paper -->
+      <div class="official-receipt-paper" id="printableReceiptPaper">
+        <!-- Injected dynamically by buildOfficialReceiptHtml() -->
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

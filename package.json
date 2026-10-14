@@ -1,0 +1,20 @@
+{
+  "name": "pharmachain-api",
+  "version": "1.0.0",
+  "description": "REST API Backend for PharmaChain Pharmacy Inventory & Expiry Tracking System",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": ["pharmacy", "inventory", "expiry-tracking", "mysql", "express", "api"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "morgan": "^1.10.0",
+    "mysql2": "^3.12.0"
+  }
+}
